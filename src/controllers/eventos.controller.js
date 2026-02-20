@@ -26,3 +26,20 @@ exports.getAll = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getById = async (req, res, next) => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM eventos WHERE id = $1',
+      [req.params.id]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ message: 'Evento no encontrado' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    next(error);
+  }
+};
